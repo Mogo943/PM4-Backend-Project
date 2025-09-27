@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersRepository {
+    
     Users: Array<User> = [
     {
         id: 1,
@@ -56,7 +59,42 @@ export class UsersRepository {
     },
     ]
 
-    async find(){
-        return this.Users
+    find(page: number, limit: number){
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        return this.Users.slice(startIndex, endIndex); 
+    }
+
+    findOne(id: number) {
+        return this.Users.find((user) => user.id ===  id);
+    }
+
+    create(createUserDto: CreateUserDto) {
+        const id:number = this.Users.length > 0 ? this.Users[this.Users.length - 1].id + 1 : 1;
+        const newUser: User = {id, ...createUserDto};
+        
+        this.Users = [...this.Users, newUser]
+        
+        return id;
+    }
+
+    update(id: number, updateUserDto: UpdateUserDto) {
+        const index = this.Users.findIndex((user) => user.id === id);
+       
+        if(index === -1) return undefined
+
+        this.Users[index] = { ...this.Users[index], ...updateUserDto, id };
+
+        return id
+    }
+
+    delete(id: number) {
+        const index = this.Users.findIndex((user) => user.id === id);
+
+        if(index === -1) return undefined
+
+        this.Users.splice(index, 1)
+
+        return id
     }
 }
