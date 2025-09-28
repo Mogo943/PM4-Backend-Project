@@ -69,6 +69,10 @@ export class UsersRepository {
         return this.Users.find((user) => user.id ===  id);
     }
 
+    findByEmail(email: string ) {
+        return this.Users.find((user) => user.email === email);
+    }
+
     create(createUserDto: CreateUserDto) {
         const id:number = this.Users.length > 0 ? this.Users[this.Users.length - 1].id + 1 : 1;
         const newUser: User = {id, ...createUserDto};
