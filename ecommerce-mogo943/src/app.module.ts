@@ -5,9 +5,28 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import typeorm from './config/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoriesModule } from './categories/categories.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
-  imports: [UsersModule, ProductsModule, AuthModule],
+  imports: [
+    UsersModule, 
+    ProductsModule, 
+    AuthModule, 
+    ConfigModule.forRoot({
+      isGlobal: true, 
+      load: [typeorm],
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => config.get('typeorm')!,
+    }),
+    CategoriesModule,
+    OrdersModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

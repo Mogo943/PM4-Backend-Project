@@ -1,9 +1,10 @@
-export class CreateUserDto {
+export class TempUser  {
+    id: number;
     email: string;
-    password: string;
     name: string;
-    phone: string;
+    password: string;
     address: string;
+    phone: string;
     country?: string;
     city?: string;
 }

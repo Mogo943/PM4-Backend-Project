@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { TempUser } from './entities/userTemp.entity';
 
 @Injectable()
 export class UsersRepository {
     
-    Users: Array<User> = [
+    Users: Array<TempUser> = [
     {
         id: 1,
         email: "juan.perez@example.com",
@@ -59,10 +59,8 @@ export class UsersRepository {
     },
     ]
 
-    find(page: number, limit: number){
-        const startIndex = (page - 1) * limit;
-        const endIndex = startIndex + limit;
-        return this.Users.slice(startIndex, endIndex); 
+    find(){
+        return this.Users; 
     }
 
     findOne(id: number) {
@@ -75,7 +73,7 @@ export class UsersRepository {
 
     create(createUserDto: CreateUserDto) {
         const id:number = this.Users.length > 0 ? this.Users[this.Users.length - 1].id + 1 : 1;
-        const newUser: User = {id, ...createUserDto};
+        const newUser: TempUser = {id, ...createUserDto};
         
         this.Users = [...this.Users, newUser]
         

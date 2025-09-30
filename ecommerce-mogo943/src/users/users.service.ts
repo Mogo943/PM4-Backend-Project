@@ -1,58 +1,40 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersRepository } from './users.repository';
-import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Users } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository){}
+  constructor(
+    @InjectRepository(Users)
+    private readonly usersRepository: Repository<Users>,
+  ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<number> {
-    //validacion de datos del Dto
-    const { email, name, password, address, phone } = createUserDto;
-    if (!email || !name || !password || !address || !phone) {
-      throw new Error('Missing required fields');
-    }
-    const newID: number = await this.usersRepository.create(createUserDto)
-    return newID;
+  async create(createUserDto: CreateUserDto) {
+    return await this.usersRepository.create(createUserDto)
   }
 
-  async findAll(page: number, limit: number): Promise<User[]> {
-    const users: User[] = await this.usersRepository.find(page, limit);
-    return users
-  }
-
-  async findOne(id: number): Promise<User | undefined> {
+  async findAll(page: number = 1, limit: number = 3) {
+    let users = await this.usersRepository.find();
     
-    if(id <= 0) throw new BadRequestException(`Invalid id ${id}`)
+    const start = (page - 1) * limit;
+    const end = page + limit;
 
-    const user: User | undefined = await this.usersRepository.findOne(id);
-
-    if(!user) throw new NotFoundException(`User with id ${id} not found`);
-
-    return user;
+    return  (users = users.slice(start, end))
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<number> {
-    //Validacion de datos del Dto
-    if(id <= 0) throw new BadRequestException(`Invalid id ${id}`)
-      
-    const updatedID: number | undefined = await this.usersRepository.update(id, updateUserDto);
-    
-    if(!updatedID) throw new NotFoundException (`User with id ${id} not found`)
-
-    return updatedID;
+  async findOne(id: string) {
+    return await this.usersRepository.findOneBy({ id });
   }
 
-  async remove(id: number): Promise<number> {
-    if(id <= 0) throw new BadRequestException(`Invalid id ${id}`)
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return await this.usersRepository.update(id, updateUserDto);
+  }
 
-    const deletedID = await this.usersRepository.delete(id);
-    
-    if(!deletedID) throw new NotFoundException (`User with id ${id} not found`)
-
-    return deletedID;
+  async remove(id: string) {
+    return await this.usersRepository.delete(id);
   }
 }

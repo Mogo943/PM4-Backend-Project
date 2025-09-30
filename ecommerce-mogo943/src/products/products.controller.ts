@@ -11,15 +11,16 @@ export class ProductsController {
   @HttpCode(200)
   @Get()
   findAll( @Query('page') page?: string, @Query('limit') limit?: string ) {
-    const pageNumber = page ? +page : 1;
-    const limitNumber = limit ? +limit : 5;
-    return this.productsService.findAll(pageNumber, limitNumber);
+    if(page && limit){
+      return this.productsService.findAll(+page, +limit);
+    }
+    return this.productsService.findAll();
   }
 
   @HttpCode(200)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+    return this.productsService.findOne(id);
   }
 
   @UseGuards(AuthGuard)
@@ -33,13 +34,13 @@ export class ProductsController {
   @HttpCode(200)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(+id, updateProductDto);
+    return this.productsService.update(id, updateProductDto);
   }
 
   @UseGuards(AuthGuard)
   @HttpCode(200)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+    return this.productsService.remove(id);
   }
 }

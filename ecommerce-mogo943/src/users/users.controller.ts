@@ -12,16 +12,17 @@ export class UsersController {
   @HttpCode(200)
   @Get()
   findAll( @Query('page') page?: string, @Query('limit') limit?: string ) {
-    const pageNumber = page ? +page : 1;
-    const limitNumber = limit ? +limit : 5;
-    return this.usersService.findAll(pageNumber, limitNumber);
+    if(page && limit){
+      return this.usersService.findAll(+page, +limit);
+    }
+    return this.usersService.findAll();
   }
 
   @UseGuards(AuthGuard)
   @HttpCode(200)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOne(id);
   }
 
   @HttpCode(201)
@@ -34,13 +35,13 @@ export class UsersController {
   @HttpCode(200)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   @UseGuards(AuthGuard)
   @HttpCode(200)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }

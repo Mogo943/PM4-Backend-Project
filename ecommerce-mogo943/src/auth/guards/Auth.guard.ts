@@ -9,16 +9,15 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
 
     const request: Request = context.switchToHttp().getRequest();
-    const authHeader = request.headers['authorization'];
+    const authHeader = request.headers.authorization;
 
-    if(!authHeader) throw new UnauthorizedException('Authorization header missing');
+    if(!authHeader) return false;
+    if(!authHeader.startsWith('Basic ')) return false;
 
-    if(!authHeader.startsWith('Basic ')) throw new UnauthorizedException('Invalid authorization scheme');
-
-    const credentials = authHeader.replace('Basic ', '').trim();
+    const credentials = authHeader.split(' ')[1];
     const [ email, password ] = credentials.split(':');
 
-    if(!email || !password) throw new UnauthorizedException('Invalid authorization format. Expected Basic <email>:<password>')
+    if(!email || !password)  return false;
 
     return true;
   }

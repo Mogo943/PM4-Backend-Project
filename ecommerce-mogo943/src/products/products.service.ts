@@ -1,60 +1,39 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Product } from './entities/product.entity';
-import { ProductRespository } from './products.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Products } from './entities/product.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly productRepository: ProductRespository){}
+  constructor(
+    @InjectRepository(Products)
+    private readonly productRepository: Repository<Products>
+  ){}
 
-  async create(createProductDto: CreateProductDto): Promise<number> {
-    //validacion de datos del Dto
-    const { name, description, price, stock, imgUrl } = createProductDto;
+  async create(createProductDto: CreateProductDto){
+    return await this.productRepository.create(createProductDto);
+  }
+
+  async findAll(page: number = 1, limit: number = 2) {
+    let products = await this.productRepository.find();
     
-    if (!name || !description || price === undefined || stock === undefined || !imgUrl) {
-      throw new Error('Missing required fields');
-    }
-    
-    const newID: number = await this.productRepository.create(createProductDto);
-
-    return newID;
+    const start = (page - 1) * limit;
+    const end = page + limit;
+  
+    return  (products = products.slice(start, end))
   }
 
-  async findAll(pages: number, limit: number): Promise<Product[]> {
-    const products: Product[] = await this.productRepository.find(pages, limit);
-
-    return products;
+  async findOne(id: string) {
+    return await this.productRepository.findOneBy({ id });
   }
 
-  async findOne(id: number): Promise<Product> {
-    if(id <= 0) throw new BadRequestException(`Invalid id ${id}`);
-
-    const product: Product | undefined = await this.productRepository.findOne(id);
-
-    if(!product) throw new NotFoundException(`Product with id ${id} not found`);
-
-    return product;
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    return await this.productRepository.update(id, updateProductDto);
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<number> {
-    //validacion de datos del Dto
-    if(id <= 0) throw new BadRequestException(`Invalid id ${id}`);
-
-    const updatedID: number | undefined = await this.productRepository.update(id, updateProductDto);
-
-    if(!updatedID) throw new NotFoundException(`Product with id ${id} not found`);
-
-    return updatedID;
-  }
-
-  async remove(id: number): Promise<number> {
-    if(id <= 0) throw new BadRequestException(`Invalid id ${id}`)
-    
-    const deletedID: number | undefined = await this.productRepository.delete(id);
-
-    if(!deletedID) throw new NotFoundException (`User with id ${id} not found`)
-
-    return deletedID;
+  async remove(id: string) {
+    return await this.productRepository.delete(id);
   }
 }

@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { Product } from "./entities/product.entity";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
+import { TempProduct } from "./entities/productsTemp.entity";
 
 @Injectable()
 export class ProductRespository {
-    Products: Array<Product> = [
+    Products: Array<TempProduct> = [
   {
     id: 1,
     name: "Laptop Gamer",
@@ -88,10 +88,8 @@ export class ProductRespository {
   },
     ]
 
-    find(page: number, limit: number) {
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      return this.Products.slice(startIndex, endIndex);
+    find() {
+      return this.Products;
     }
 
     findOne(id: number){
@@ -100,7 +98,7 @@ export class ProductRespository {
 
     create(createProductDto: CreateProductDto) {
       const id = this.Products.length > 0 ? this.Products[this.Products.length - 1].id + 1 : 1;
-      const newProduct: Product = { id, ...createProductDto }
+      const newProduct: TempProduct = { id, ...createProductDto }
       
       this.Products = [...this.Products, newProduct];
 
