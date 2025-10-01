@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -41,12 +41,22 @@ export class ProductsService {
   }
 
   async create(createProductDto: CreateProductDto){
-    return await this.productRepository.save(createProductDto);
+    const foundProduct: Products | null = await this.productRepository.findOneBy(
+      {
+        name: createProductDto.name
+      }
+    )
+    if(foundProduct) throw new BadRequestException('Product already exists');
+
+    const newProduct: Products = this.productRepository.create({ ...createProductDto })
+    return await this.productRepository.save(newProduct);
   }
 
   async findAll(page: number = 1, limit: number = 2) {
     let products = await this.productRepository.find();
     
+    if(!products) throw new BadRequestException('Not products charged')
+
     const start = (page - 1) * limit;
     const end = page + limit;
   
@@ -54,14 +64,38 @@ export class ProductsService {
   }
 
   async findOne(id: string) {
-    return await this.productRepository.findOneBy({ id });
+    const product: Products | null = await this.productRepository.findOne({
+      where: { id },
+      relations: {
+        category: true,
+        orderDetails: true,
+      }
+    })
+
+    if(!product) throw new NotFoundException('Product not found')
+
+    return product;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
+    const foundProduct: Products | null = await this.productRepository.findOneBy(
+      {
+        id
+      }
+    )
+    if(!foundProduct) throw new NotFoundException('Product not found');
+
     return await this.productRepository.update(id, updateProductDto);
   }
 
   async remove(id: string) {
+    const foundProduct: Products | null = await this.productRepository.findOneBy(
+      {
+        id
+      }
+    )
+    if(!foundProduct) throw new NotFoundException('Product not found');
+    
     return await this.productRepository.delete(id);
   }
 }

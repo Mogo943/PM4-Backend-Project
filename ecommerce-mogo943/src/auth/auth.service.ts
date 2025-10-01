@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
 import { Users } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { LogginUserDto } from 'src/users/dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +11,7 @@ export class AuthService {
     private readonly usersRepository: Repository<Users>
   ) {}
 
-  async signin(createAuthDto: CreateAuthDto) {
+  async signin(createAuthDto: LogginUserDto) {
 
     if(!createAuthDto.email || !createAuthDto.password) throw new BadRequestException('Email and password required');
 

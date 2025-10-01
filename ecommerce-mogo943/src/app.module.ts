@@ -15,6 +15,8 @@ import { OrdersModule } from './orders/orders.module';
   imports: [
     UsersModule, 
     ProductsModule, 
+    OrdersModule,
+    CategoriesModule,
     AuthModule, 
     ConfigModule.forRoot({
       isGlobal: true, 
@@ -24,8 +26,6 @@ import { OrdersModule } from './orders/orders.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get('typeorm')!,
     }),
-    CategoriesModule,
-    OrdersModule
   ],
   controllers: [AppController],
   providers: [AppService],

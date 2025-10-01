@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Categories } from './entities/category.entity';
 import { Repository } from 'typeorm';
@@ -28,13 +28,23 @@ export class CategoriesService {
   }
 
   async getCategories(){
-    return await this.categoryRepository.find()
+    const categories = await this.categoryRepository.find();
+
+    if(!categories) throw new BadRequestException('Not categories cherged');
+
+    return categories;
   }
 
   async addCategories(createCategoryDto: CreateCategoryDto){
-    const newCategory: Categories = this.categoryRepository.create(createCategoryDto);
-    await this.categoryRepository.save(newCategory);
+    const foundCategory: Categories | null = await  this.categoryRepository.findOneBy(
+      {
+        name: createCategoryDto.name
+      }
+    )
+    if(foundCategory) throw new BadRequestException('Category already exists');
 
-    return newCategory;
+    const newCategory: Categories = this.categoryRepository.create(createCategoryDto);
+
+    return await this.categoryRepository.save(newCategory);
   }
 }

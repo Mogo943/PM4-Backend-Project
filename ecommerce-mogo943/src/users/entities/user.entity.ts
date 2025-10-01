@@ -30,8 +30,9 @@ export class Users {
 
   @Column({
     type: 'bigint',
+    nullable: false,
   })
-  phone: string;
+  phone: number;
   
   @Column({
     type: 'text',
