@@ -14,7 +14,12 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return await this.usersRepository.create(createUserDto)
+    const newUser: Users = this.usersRepository.create({ ...createUserDto })
+    await this.usersRepository.save(newUser)
+
+    const {password, ...userWithoutPassword} = newUser
+    
+    return userWithoutPassword
   }
 
   async findAll(page: number = 1, limit: number = 3) {
@@ -27,7 +32,13 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    return await this.usersRepository.findOneBy({ id });
+    const user: Users | null = await this.usersRepository.findOne({
+      where: { id },
+      relations: {
+        order: true
+      }
+    })
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

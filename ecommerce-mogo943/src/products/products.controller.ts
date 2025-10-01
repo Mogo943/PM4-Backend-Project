@@ -8,6 +8,12 @@ import { AuthGuard } from 'src/auth/guards/Auth.guard';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @HttpCode(201)
+  @Get('seeder')
+  seeder(){
+    return this.productsService.seeder()
+  }
+
   @HttpCode(200)
   @Get()
   findAll( @Query('page') page?: string, @Query('limit') limit?: string ) {

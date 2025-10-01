@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetails } from "./orderDetail.entity";
 import { Users } from "src/users/entities/user.entity";
 
@@ -10,7 +10,7 @@ export class Orders {
     @Column()
     date: Date;
 
-    @ManyToMany(() => Users, (user) => user.order)
+    @ManyToOne(() => Users, (user) => user.order)
     @JoinColumn({ name: 'user_id' })
     user: Users;
 

@@ -11,7 +11,7 @@ export class Products {
         type: 'varchar',
         length: 50,
         nullable: false,
-        unique: true,
+        unique:true,
     })
     name: string;
 
@@ -39,7 +39,7 @@ export class Products {
         type: 'text',
         default: 'No Image'
     })
-    imgUrl?: string;
+    imgUrl: string;
 
     @ManyToMany(() => OrderDetails, (orderDetail) => orderDetail.products)
     orderDetails: OrderDetails[];
