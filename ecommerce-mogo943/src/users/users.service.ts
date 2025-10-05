@@ -13,22 +13,6 @@ export class UsersService {
     private readonly usersRepository: Repository<Users>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const foundUser: Users | null = await this.usersRepository.findOneBy(
-      {
-        email: createUserDto.email
-      }
-    )
-    if(foundUser) throw new BadRequestException('User already exists');
-
-    const newUser: Users = this.usersRepository.create({ ...createUserDto })
-    await this.usersRepository.save(newUser)
-
-    const {password, ...userWithoutPassword} = newUser
-    
-    return userWithoutPassword
-  }
-
   async findAll(page: number = 1, limit: number = 3) {
     let users = await this.usersRepository.find();
     

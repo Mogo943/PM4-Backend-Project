@@ -1,4 +1,4 @@
-import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, isNumber, IsNumberString, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, Matches, MaxLength, MinLength, ValidateIf } from "class-validator";
 
 export class CreateUserDto {
     @IsNotEmpty({ message:'El email es obligatorio' })
@@ -16,6 +16,10 @@ export class CreateUserDto {
         minSymbols: 1}, 
         {message:'La contraseña debe tener al menos una mayuscula, una minuscula, un numero y un caracter especial'})
     password: string;
+
+    @IsNotEmpty({ message: 'Confirma la contraseña' })
+    @IsString({message: 'La constraseña debe ser un string'})
+    confirmPassword: string;
 
     @IsNotEmpty( { message:'El nombre es obligatorio' } )
     @IsString({message: 'El nombre debe ser un string'})
