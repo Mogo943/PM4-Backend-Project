@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/user.entity';
@@ -33,8 +32,8 @@ export class UsersService {
     })
 
     if(!user) throw new NotFoundException('User not found')
-
-    return user;
+    const { password, ...userWithOutPassword} = user;
+    return userWithOutPassword;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

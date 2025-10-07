@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/auth/guards/Auth.guard';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
+  
   @HttpCode(201)
   @Get('seeder')
   seeder() {

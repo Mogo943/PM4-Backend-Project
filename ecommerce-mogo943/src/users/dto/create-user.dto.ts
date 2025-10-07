@@ -1,4 +1,5 @@
-import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, Matches, MaxLength, MinLength, ValidateIf } from "class-validator";
+import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, Matches, MaxLength, MinLength, Validate, ValidateIf } from "class-validator";
+// import { ValidatePassword } from "src/helpers/validatePassword";
 
 export class CreateUserDto {
     @IsNotEmpty({ message:'El email es obligatorio' })
@@ -19,6 +20,7 @@ export class CreateUserDto {
 
     @IsNotEmpty({ message: 'Confirma la contraseña' })
     @IsString({message: 'La constraseña debe ser un string'})
+    // @Validate(ValidatePassword, ['password'])
     confirmPassword: string;
 
     @IsNotEmpty( { message:'El nombre es obligatorio' } )

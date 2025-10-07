@@ -7,7 +7,7 @@ import { AuthGuard } from 'src/auth/guards/Auth.guard';
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
-
+  
   @HttpCode(201)
   @Get('seeder')
   seeder(){

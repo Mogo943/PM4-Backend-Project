@@ -5,29 +5,40 @@ import { Repository } from 'typeorm';
 import { LogginUserDto } from 'src/users/dto/login-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Users)
-    private readonly usersRepository: Repository<Users>
+    private readonly usersRepository: Repository<Users>,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async signin(createAuthDto: LogginUserDto) {
+  async signin(credentials: LogginUserDto) {
 
-    if(!createAuthDto.email || !createAuthDto.password) throw new BadRequestException('Email and password required');
+    if(!credentials.email || !credentials.password) throw new BadRequestException('Email and password required');
 
-    const email = createAuthDto.email;
+    const email = credentials.email;
     const user: Users | null = await this.usersRepository.findOneBy({email});
 
     if(!user) throw new NotFoundException('Wrong user or password');
     
-    const isPasswordvalid = await bcrypt.compare( createAuthDto.password, user.password);
+    const isPasswordvalid = await bcrypt.compare( credentials.password, user.password);
+
     if(!isPasswordvalid) throw new NotFoundException('Wrong user or password');
     
+    const payload = {
+      id: user.id,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    }
+
+    const token = this.jwtService.sign(payload)
+
     const { password, ...userWithOutPassWord } = user;
 
-    return userWithOutPassWord;
+    return {login: true, access_token: token, userWithOutPassWord};
   }
 
   async signup(createUserDto: CreateUserDto) {

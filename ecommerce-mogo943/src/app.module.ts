@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoriesModule } from './categories/categories.module';
 import { OrdersModule } from './orders/orders.module';
 import { FileUploadModule } from './file-upload/file-upload.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { FileUploadModule } from './file-upload/file-upload.module';
     CategoriesModule,
     AuthModule, 
     ConfigModule.forRoot({
-      isGlobal: true, 
+      isGlobal: true,
       load: [typeorm],
     }),
     TypeOrmModule.forRootAsync({
@@ -28,6 +29,13 @@ import { FileUploadModule } from './file-upload/file-upload.module';
       useFactory: (config: ConfigService) => config.get('typeorm')!,
     }),
     FileUploadModule,
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: "1h",
+      }
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
