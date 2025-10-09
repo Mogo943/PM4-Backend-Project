@@ -3,19 +3,24 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from 'src/auth/guards/Auth.guard';
+import { Role } from 'src/enums/role.enum';
+import { Roles } from 'src/decorators/role.decorator';
+import { RolesGuard } from 'src/auth/guards/Roles.guard';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
   
-  @HttpCode(201)
   @Get('seeder')
+  @HttpCode(201)
   seeder(){
     return this.productsService.seeder()
   }
 
-  @HttpCode(200)
   @Get()
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @HttpCode(200)
   findAll( @Query('page') page?: string, @Query('limit') limit?: string ) {
     if(page && limit){
       return this.productsService.findAll(+page, +limit);
@@ -23,29 +28,34 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
-  @HttpCode(200)
   @Get(':id')
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @HttpCode(200)
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.productsService.findOne(id);
   }
 
-  @UseGuards(AuthGuard)
-  @HttpCode(201)
   @Post()
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @HttpCode(201)
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
-  @UseGuards(AuthGuard)
-  @HttpCode(200)
   @Patch(':id')
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @HttpCode(200)
   update(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(id, updateProductDto);
   }
 
-  @UseGuards(AuthGuard)
-  @HttpCode(200)
   @Delete(':id')
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @HttpCode(200)
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.productsService.remove(id);
   }

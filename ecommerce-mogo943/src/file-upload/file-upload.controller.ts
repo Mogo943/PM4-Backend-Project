@@ -7,8 +7,8 @@ import { AuthGuard } from 'src/auth/guards/Auth.guard';
 export class FileUploadController {
   constructor(private readonly fileUploadService: FileUploadService) {}
 
-  @UseGuards(AuthGuard)
   @Put('uploadImage/:productId')
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   uploadImage(
     @UploadedFile(

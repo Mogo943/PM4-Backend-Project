@@ -6,6 +6,7 @@ import { LogginUserDto } from 'src/users/dto/login-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from 'src/enums/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -32,6 +33,7 @@ export class AuthService {
       id: user.id,
       email: user.email,
       isAdmin: user.isAdmin,
+      rol: [user.isAdmin? Role.Admin : Role.User]
     }
 
     const token = this.jwtService.sign(payload)
@@ -59,7 +61,7 @@ export class AuthService {
     const newUser: Users = this.usersRepository.create({ ...userData, password: hashedPassword })
     await this.usersRepository.save(newUser)
 
-    const {password, ...userWithoutPassword} = newUser
+    const {password, isAdmin, ...userWithoutPassword} = newUser
     
     return userWithoutPassword
   }

@@ -18,11 +18,14 @@ export class AuthGuard implements CanActivate {
     
     try {
       const user = this.jwtService.verify(token, { secret });
-    
+      
+      request ['user'] = user;
+      
       user.iat = new Date(user.iat * 1000).toLocaleString();
       user.exp = new Date(user.exp * 1000).toLocaleString();
 
       console.log(user)
+
     } catch (error) {
       console.log(error);
       return false;

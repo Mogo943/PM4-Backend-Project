@@ -7,14 +7,14 @@ import { AuthGuard } from 'src/auth/guards/Auth.guard';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @UseGuards(AuthGuard)
   @Post()
+  @UseGuards(AuthGuard)
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.ordersService.create(createOrderDto);
   }
 
-  @UseGuards(AuthGuard)
   @Get(':id')
+  @UseGuards(AuthGuard)
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.ordersService.findOne(id);
   }

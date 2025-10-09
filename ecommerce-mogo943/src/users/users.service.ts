@@ -20,7 +20,12 @@ export class UsersService {
     const start = (page - 1) * limit;
     const end = page + limit;
 
-    return  (users = users.slice(start, end))
+    let usersWithOutPassword = users.map((user) => {
+      const {password, isAdmin, ...userWithOutPassword} = user;
+      return userWithOutPassword
+    })
+
+    return  (usersWithOutPassword = usersWithOutPassword.slice(start, end))
   }
 
   async findOne(id: string) {
@@ -32,7 +37,7 @@ export class UsersService {
     })
 
     if(!user) throw new NotFoundException('User not found')
-    const { password, ...userWithOutPassword} = user;
+    const { password, isAdmin, ...userWithOutPassword} = user;
     return userWithOutPassword;
   }
 
