@@ -2,13 +2,17 @@ import { Controller, FileTypeValidator, MaxFileSizeValidator, Param, ParseFilePi
 import { FileUploadService } from './file-upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/auth/guards/Auth.guard';
+import { RolesGuard } from 'src/auth/guards/Roles.guard';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/enums/role.enum';
 
 @Controller('file-upload')
 export class FileUploadController {
   constructor(private readonly fileUploadService: FileUploadService) {}
 
   @Put('uploadImage/:productId')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @UseInterceptors(FileInterceptor('file'))
   uploadImage(
     @UploadedFile(
@@ -26,7 +30,8 @@ export class FileUploadController {
       })
 
     ) file: Express.Multer.File,
-    @Param('productId', ParseUUIDPipe) productId: string) {
+    @Param('productId', ParseUUIDPipe) productId: string
+  ) {
     return this.fileUploadService.uploadImage(file, productId);
   }
 }

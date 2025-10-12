@@ -2,8 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Users } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { LogginUserDto } from 'src/users/dto/login-user.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserDto, LoginUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from 'src/enums/role.enum';
@@ -16,7 +15,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signin(credentials: LogginUserDto) {
+  async signin(credentials: LoginUserDto) {
 
     if(!credentials.email || !credentials.password) throw new BadRequestException('Email and password required');
 
@@ -35,6 +34,8 @@ export class AuthService {
       isAdmin: user.isAdmin,
       rol: [user.isAdmin? Role.Admin : Role.User]
     }
+
+    console.log(payload)
 
     const token = this.jwtService.sign(payload)
 

@@ -19,7 +19,7 @@ export class OrderDetails {
     @JoinColumn({ name: 'order_id' })
     order: Orders;
 
-    @ManyToMany(() => Products)
+    @ManyToMany(() => Products, (product) => product.orderDetails)
     @JoinTable({
         name: 'order_details_products',
     })

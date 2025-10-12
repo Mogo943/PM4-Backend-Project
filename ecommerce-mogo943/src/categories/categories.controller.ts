@@ -5,6 +5,7 @@ import { AuthGuard } from 'src/auth/guards/Auth.guard';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
 import { RolesGuard } from 'src/auth/guards/Roles.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('categories')
 export class CategoriesController {
@@ -23,6 +24,7 @@ export class CategoriesController {
     return this.categoriesService.getCategories();
   }
 
+  @ApiBearerAuth()
   @Post()
   @Roles(Role.Admin)
   @UseGuards(AuthGuard, RolesGuard)

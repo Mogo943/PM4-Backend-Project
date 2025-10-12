@@ -20,13 +20,13 @@ export class OrdersService {
       private readonly ordersDetailsRepository: Repository<OrderDetails>,
     ) {}
   async create(createOrderDto: CreateOrderDto) {
-    const user: Users | null = await this.usersRepository.findOneBy({ id: createOrderDto.userId });
+    const userFound: Users | null = await this.usersRepository.findOneBy({ id: createOrderDto.userId });
 
-    if(!user) throw new NotFoundException('User not found');
+    if(!userFound) throw new NotFoundException('User not found');
 
     const order: Orders = new Orders();
     order.date = new Date();
-    order.user = user;
+    order.user = userFound;
 
     const newOrder: Orders = await this.ordersRepository.save(order);
 
@@ -57,11 +57,8 @@ export class OrdersService {
     orderDetail.order = newOrder;
 
     await this.ordersDetailsRepository.save(orderDetail);
-
-    return await this.ordersRepository.find({
-      where: { id: newOrder.id },
-      relations: { orderDetails: true }
-    })
+    
+    return 'Order created successfully'
   }
 
   async findOne(id: string) {
@@ -74,7 +71,20 @@ export class OrdersService {
       },
     });
     if(!order) throw new NotFoundException('Order not found')
+    const { orderDetails, ...otherData } = order;
+    const { products, ...otherDataOrderDetails } = orderDetails;
 
-    return order;
+    const productsWithOutStock = products.map((product) => {
+      const { stock, ...productWithOutStock } = product;
+
+      return productWithOutStock
+    })
+    return {
+      ...otherData,
+      orderDetails: {
+        otherDataOrderDetails,
+        products: productsWithOutStock,
+      }
+    };
   }
 }
