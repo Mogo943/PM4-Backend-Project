@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString, IsUUID, ValidateNested } from "class-validator";
-import { Products } from "src/products/entities/product.entity";
 import { config as dotenvConfig } from 'dotenv';
 
 dotenvConfig({ path: './.development.env'})

@@ -3,6 +3,7 @@ import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AuthGuard } from 'src/auth/guards/Auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { SelfIDorAdmin } from 'src/auth/guards/SelfIDorAdmin.guard';
 
 @Controller('orders')
 export class OrdersController {
@@ -10,7 +11,7 @@ export class OrdersController {
 
   @ApiBearerAuth()
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, SelfIDorAdmin)
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.ordersService.create(createOrderDto);
   }

@@ -20,8 +20,7 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Get()
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard)
   @HttpCode(200)
   findAll( @Query('page') page?: string, @Query('limit') limit?: string ) {
     if(page && limit){
@@ -32,8 +31,7 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Get(':id')
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard)
   @HttpCode(200)
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.productsService.findOne(id);

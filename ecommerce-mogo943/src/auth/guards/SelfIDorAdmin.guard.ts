@@ -11,14 +11,27 @@ export class SelfIDorAdmin implements CanActivate{
         const { user } = request;
         const targetId = request.params.id;
 
+        const { body } = request;
+        const { userId } = body;
+
 
         if(!user) throw new ForbiddenException('User not authenticated');
 
         const isAdmin = user.rol.some((role) => role === Role.Admin);
-        console.log(user.rol)
-        const isItSelf = user.id === targetId
 
-        if(!isAdmin && !isItSelf) throw new ForbiddenException('You are not allowed to do this action');
+        if (targetId) {
+            const isItSelfToDeleteUser = user.id === targetId;
+            if (!isAdmin && !isItSelfToDeleteUser) {
+                throw new ForbiddenException('You are not allowed to modify this user');
+            }
+            }
+
+        if (userId) {
+            const isItSelfToSetOrders = user.id === userId;
+            if (!isAdmin && !isItSelfToSetOrders) {
+                throw new ForbiddenException('You are not allowed to create this order');
+            }
+        }
 
         return true;
     }
