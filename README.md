@@ -30,3 +30,14 @@ npm install
 Configurar las variables de entorno como estan en el archivo .env.example para lograr la conexion a la base de datos y al almacenamiento en la nube
 
 npm run start
+
+---
+
+### 📫 Contacto
+
+Si buscas un perfil Full Stack detallista, con un enfoque en la calidad del software (QA) y la eficiencia:
+- ✉️ **Email:** carlosmogo.work@gmail.com
+- 💼 [**LinkedIn**](https://www.linkedin.com/in/carlosmogollon-it/)
+- 📁 [**CV**](https://bit.ly/carlos-mogollon-cv)
+
+---
