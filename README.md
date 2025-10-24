@@ -15,6 +15,13 @@ Además de la subida de archivos, busqueda y creacion de categorias y detalles d
 - **Testing / QA**: API testing.
 - **Otras herramientas**: Git/GitHub, Postman/Insomnia, variables de entorno.
 
+<p align="center">
+  <p>Tecnologias</p>
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=git,github,js,nestjs,nodejs,npm,ts,postgres,postman,vscode," />
+  </a>
+</p>
+
 ---
 
 ## Instalación
