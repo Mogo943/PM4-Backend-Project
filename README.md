@@ -27,6 +27,6 @@ cd PM3-Project
 npm install
 
 # Variables de entorno
-Configurar las variables de entorno como estan en el archivo .example.env
+Configurar las variables de entorno como estan en el archivo .env.example para lograr la conexion a la base de datos y al almacenamiento en la nube
 
 npm run start
