@@ -1,45 +1,52 @@
-# Gestor de Turnos Full Stack
-Proyecto del Módulo 4 Backend — Soy Henry | Full Stack Dev
+# API REST E-commerce (Backend Architecture)
+Microservicios y Lógica de Negocio para Comercio Electrónico
 
 ---
 
-## Descripción  
-PM4-Backend-Project es una aplicación backend desarrollada como parte del Módulo 4 del bootcamp de Soy Henry. Incluye backend REST con Node.js para ofrecer en el contexto de un e-commerce: creacion, actualizacion, busqueda, eliminacion y autenticacion de usuarios, productos y ordenes de compras.
-Además de la subida de archivos, busqueda y creacion de categorias y detalles de ordenes de compra. Estableciendo una logica de negocio de un e-commerce.
+## 📋 Descripción
+Sistema backend de alto rendimiento diseñado para simular el núcleo operativo de un e-commerce. Esta API RESTful gestiona la lógica de negocio compleja, incluyendo autenticación segura, gestión de inventario y procesamiento de órdenes.
+
+**Características destacadas:**
+* **Gestión de Recursos:** CRUD avanzado para Usuarios, Productos y Categorías.
+* **Seguridad:** Implementación de Autenticación (JWT), Guards y Decoradores personalizados.
+* **Lógica de Negocio:** Manejo de órdenes de compra y subida de archivos.
+* **Persistencia:** Migraciones de base de datos y relaciones complejas mediante TypeORM.
 
 ---
 
-## Tecnologías usadas
+## 🛠 Tecnologías usadas
 
-- **Backend**: Node.js, Express, TypeScript, PostgreSQL, TypeORM, enrutamiento, middlewares, guards, decoradores personalizados, JWT para autenticacion, migraciones de Bases de Datos.
-- **Testing / QA**: API testing.
-- **Otras herramientas**: Git/GitHub, Postman/Insomnia, variables de entorno.
+- **Core**: Node.js, NestJS (o Express con TypeScript avanzado), TypeScript.
+- **Datos**: PostgreSQL, TypeORM, Migraciones.
+- **Seguridad**: JWT (JSON Web Tokens), Hashing de contraseñas, Guards.
+- **QA & Testing**: Pruebas de API y endpoints.
+- **DevOps & Tools**: Docker, Git/GitHub, Postman.
 
 <p align="center">
-  <p>Tecnologias</p>
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,github,js,nestjs,nodejs,npm,ts,postgres,postman,vscode," />
+    <img src="https://skillicons.dev/icons?i=git,github,js,nestjs,nodejs,npm,ts,postgres,postman,vscode" />
   </a>
 </p>
 
 ---
 
-## Instalación
+## 💻 Instalación
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/Mogo943/PM3-Backend-Project.git
-cd PM3-Project
+# 1. Clonar el repositorio
+git clone [https://github.com/Mogo943/ecommerce-api-rest.git](https://github.com/Mogo943/ecommerce-api-rest.git)
+cd ecommerce-api-rest
 
+# 2. Instalar dependencias
 npm install
 
-# Variables de entorno
-Configurar las variables de entorno como estan en el archivo .env.example para lograr la conexion a la base de datos y al almacenamiento en la nube
+# 3. Configuración de Entorno
+# Copia el archivo .env.example a .env y configura tus credenciales 
+# de base de datos y cloud storage.
 
+# 4. Iniciar servidor
 npm run start
 ```
-
----
 
 ### 📫 Contacto
 
